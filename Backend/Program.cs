@@ -3,7 +3,9 @@ using Backend.Controllers;
 using Models;
 using Microsoft.EntityFrameworkCore;
 using Domain.Repositories.Interfaces;
-using Domain.Services;
+using Domain.Services.Implementations;
+using Domain.Services.Interfaces;
+using Backend.Services.Implementations;
 
 namespace Backend
 {
@@ -27,9 +29,10 @@ namespace Backend
                 builder.Services.AddControllers();
                 builder.Services.AddEndpointsApiExplorer();
                 builder.Services.AddSwaggerGen();
-                //builder.Services.AddDbContext<MyDbContext>(options =>
-                //    options.UseSqlite(builder.Configuration.GetConnectionString("Sqlite")));
+                builder.Services.AddDbContext<MyDbContext>(options =>
+                    options.UseSqlite(builder.Configuration.GetConnectionString("Sqlite")));
                 builder.Services.AddScoped(typeof(IRepository<>), typeof(EFRepository<>));
+                builder.Services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
                 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
                 builder.Services.AddScoped<AccountService>();
                 builder.Services.AddCors();

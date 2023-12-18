@@ -9,5 +9,6 @@ namespace HttpClientApi
         Task AddProduct(Product product);
         Task UpdateProduct(Product product);
         Task DeleteProduct(Guid id);
+        Task<Account> Register(RegistrationRequest _request);
     }
 }

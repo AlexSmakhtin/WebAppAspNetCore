@@ -56,6 +56,19 @@ namespace HttpClientApi
             response.EnsureSuccessStatusCode();
         }
 
+        public async Task<Account> Register(RegistrationRequest _request)
+        {
+            ArgumentNullException.ThrowIfNull(_request);
+            var uri = $"{_host}/api/account/registr";
+            using var response = await _httpClient.PostAsJsonAsync(uri, _request);
+            if (response == null)
+                throw new NullReferenceException(nameof(response));
+            var account = await response.Content.ReadFromJsonAsync<Account>();
+            if (account == null)
+                throw new NullReferenceException(nameof(account));
+            return account;
+        }
+
         public void Dispose()
         {
             _httpClient.Dispose();

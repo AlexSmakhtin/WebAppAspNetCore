@@ -7,15 +7,13 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    public class Account : IEntity
+    public class RegistrationRequest
     {
-        [Required]
-        public Guid Id { get; set; }
         [StringLength(100, MinimumLength = 3)]
         public string Name { get; set; } = null!;
         [RegularExpression("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$")]
-        public string EmailAddress { get; set; } = null!;
-        [Required]
+        public string Email { get; set; } = null!;
+        [RegularExpression("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\da-zA-Z]).{8,20}$")]
         public string Password { get; set; } = null!;
     }
 }

@@ -1,6 +1,9 @@
+using Frontend.Services.Implementations;
+using Frontend.Services.Interfaces;
 using HttpClientApi;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Models;
 using Serilog;
 
 namespace Frontend
@@ -13,11 +16,12 @@ namespace Frontend
             builder.RootComponents.Add<App>("#app");
             builder.RootComponents.Add<HeadOutlet>("head::after");
             builder.Services.AddScoped<IWebAppHttpClient, WebAppHttpClient>();
+            builder.Services.AddSingleton<IValidator, RegistrationRequestValidator>();
             Log.Logger = new LoggerConfiguration()
             .WriteTo.BrowserConsole()
             .CreateLogger();
-
             builder.Services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog());
+
             await builder.Build().RunAsync();
         }
     }
