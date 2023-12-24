@@ -1,38 +1,35 @@
 ﻿using Domain.Exceptions;
 using Domain.Repositories.Interfaces;
 using Domain.Services.Interfaces;
-using Models;
+using Domain.Entities;
 
 namespace Domain.Services.Implementations
 {
     public class AccountService
     {
         private readonly IAccountRepository _accountRepository;
-        private readonly IPasswordHasher _passwordHasher;
 
-        public AccountService(IAccountRepository repository, IPasswordHasher passwordHasher)
+        public AccountService(IAccountRepository repository)
         {
             _accountRepository = repository;
-            _passwordHasher = passwordHasher;
         }
 
         public async Task<Account> Register(
-            RegistrationRequest registrationRequest,
+            string name,
+            string email,
+            string password,
             CancellationToken token)
         {
-            ArgumentNullException.ThrowIfNull(registrationRequest);
+            ArgumentNullException.ThrowIfNull(name);
+            ArgumentNullException.ThrowIfNull(email);
+            ArgumentNullException.ThrowIfNull(password);
             var existedAccount = 
-                await _accountRepository.FindByEmail(registrationRequest.Email, token);
+                await _accountRepository.FindByEmail(email, token);
             if (existedAccount != null)
             {
-                throw new EmailAlreadyExistsException(nameof(existedAccount.EmailAddress));
+                throw new EmailAlreadyExistsException("Email already used");
             }
-            var newAccount = new Account()
-            {
-                EmailAddress = registrationRequest.Email,
-                Password = _passwordHasher.GenerateHash(registrationRequest.Password),
-                Name = registrationRequest.Name,
-            };
+            var newAccount = new Account(name, email, password);
             await _accountRepository.Add(newAccount, token);
             return newAccount;
         }

@@ -1,5 +1,5 @@
 ﻿using Frontend.Services.Interfaces;
-using Models;
+using HttpModels;
 using System.ComponentModel.DataAnnotations;
 
 namespace Frontend.Services.Implementations

@@ -9,18 +9,18 @@
     <h5 class="card-title">Registration</h5>
     <div class="mb-3">
         <label for="inputName" class="form-label">Name</label>
-        <input type="text" class="form-control" id="inputName" name="Name" placeholder="Enter your name" required @bind="@_name">
+        <input type="text" class="form-control w-25" id="inputName" name="Name" placeholder="Enter your name" required @bind="@_name">
     </div>
     <div class="mb-3">
         <label for="inputEmail" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="inputEmail" name="Email" placeholder="Enter email" required @bind="@_email">
+        <input type="email" class="form-control w-25" id="inputEmail" name="Email" placeholder="Enter email" required @bind="@_email">
     </div>
     <div class="mb-3">
         <label for="inputPassword" class="form-label">Password</label>
-        <input type="password" class="form-control" id="inputPassword" name="Password" placeholder="Password" required @bind="@_password">
+        <input type="password" class="form-control w-25" id="inputPassword" name="Password" placeholder="Password" required @bind="@_password">
     </div>
     <button type="button" class="btn btn-primary" @onclick="Register">Register</button>
-    <span class="text-info">@($"{InfoMessage}")</span>
+    <span class="text-info">@InfoMessage</span>
 </form>
 
 @code {
@@ -43,9 +43,9 @@
             var account = await _httpClient.Register(registrationRequest);
             InfoMessage = $"Success. Acc id:({account.Id})";
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            InfoMessage = "Failed";
+            InfoMessage = $"Failed. {ex.Message}";
         }
     }
 }

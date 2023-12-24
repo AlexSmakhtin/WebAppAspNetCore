@@ -3,7 +3,6 @@ using Frontend.Services.Interfaces;
 using HttpClientApi;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Models;
 using Serilog;
 
 namespace Frontend

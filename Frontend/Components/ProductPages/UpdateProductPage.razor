@@ -5,10 +5,10 @@
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">Search Product</h5>
-        <form>
+        <form >
             <div class="mb-3">
                 <label for="productId" class="form-label">Product ID</label>
-                <input type="text" class="form-control" id="productId" @bind="Id" placeholder="Product ID">
+                <input type="text" class="form-control w-25" id="productId" @bind="Id" placeholder="Product ID">
             </div>
             <button type="button" class="btn btn-primary" @onclick="SearchProduct">Search</button>
             <span class="text-info">@($"{InfoMessage1}")</span>
@@ -22,13 +22,13 @@
         <form>
             <div class="mb-3">
                 <label for="productName" class="form-label">Product Name</label>
-                <input type="text" class="form-control" id="productName" @bind="@_product.Name" placeholder="min-3, max-100 chars">
+                <input type="text" class="form-control w-25" id="productName" @bind="@_name" placeholder="min-3, max-100 chars">
             </div>
             <div class="mb-3">
                 <label for="productPrice" class="form-label">Price</label>
-                <input type="number" class="form-control" id="productPrice" @bind="@_product.Price" step="0.05" min="0.01">
+                <input type="number" class="form-control w-25" id="productPrice" @bind="@_price" step="0.05" min="0.01">
             </div>
-            <button type="button" class="btn btn-primary" @onclick="UpdateProduct">Update Product</button>
+            <button type="button" class="btn btn-primary " @onclick="UpdateProduct">Update Product</button>
             <span class="text-info">@($"{InfoMessage2}")</span>
         </form>
     </div>
@@ -36,16 +36,18 @@
 
 @code {
     private Guid Id { get; set; } = Guid.Empty;
-    private Product _product { get; set; } = new Product();
     private string InfoMessage1 = string.Empty;
     private string InfoMessage2 = string.Empty;
     private string _class = "d-none";
+    private string _name = string.Empty;
+    private decimal _price = 0.01m;
+    private Product _product = null!;
 
     private async Task UpdateProduct()
     {
         try
         {
-            await _httpClient.UpdateProduct(_product);
+            await _httpClient.UpdateProduct(new Product(_name, _price));
             InfoMessage2 = "Success";
         }
         catch (Exception)

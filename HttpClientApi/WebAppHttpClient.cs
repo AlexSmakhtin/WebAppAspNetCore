@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using Domain.Entities;
+using HttpModels;
 using System.Net.Http.Json;
 
 namespace HttpClientApi
@@ -59,7 +60,7 @@ namespace HttpClientApi
         public async Task<Account> Register(RegistrationRequest _request)
         {
             ArgumentNullException.ThrowIfNull(_request);
-            var uri = $"{_host}/api/account/registr";
+            var uri = $"{_host}/api/account/register";
             using var response = await _httpClient.PostAsJsonAsync(uri, _request);
             if (response == null)
                 throw new NullReferenceException(nameof(response));

@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using Domain.Entities;
+using HttpModels;
 
 namespace HttpClientApi
 {

@@ -17,7 +17,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\HttpClientApi\HttpClientApi.csproj" />
-    <ProjectReference Include="..\Models\Models.csproj" />
   </ItemGroup>
 
 </Project>

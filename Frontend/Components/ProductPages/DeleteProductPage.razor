@@ -8,7 +8,7 @@
         <form>
             <div class="mb-3">
                 <label for="productId" class="form-label">Product ID</label>
-                <input type="text" class="form-control" id="productId" @bind="Id" placeholder="Product ID">
+                <input type="text" class="form-control w-25" id="productId" @bind="Id" placeholder="Product ID">
             </div>
             <button type="button" class="btn btn-primary" @onclick="SearchProduct">Search</button>
             <span class="text-info">@($"{InfoMessage1}")</span>
@@ -27,14 +27,14 @@
             <button type="button" class="btn btn-primary " @onclick="DeleteProduct">Delete</button>
             <span class="text-info">@($"{InfoMessage2}")</span>
         </div>
-        
+
     </div>
 }
 
 
 @code {
     private Guid Id { get; set; } = Guid.Empty;
-    private Product? _product { get; set; }
+    private Product? _product = null!;
     private string InfoMessage1 = string.Empty;
     private string InfoMessage2 = string.Empty;
     private string _class = string.Empty;
