@@ -74,15 +74,16 @@ namespace Domain.Entities
         }
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public Account( string name, string email, string password)
+        public Account(string name, string email, string password)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             Name = name;
             EmailAddress = email;
             Password = password;
         }
-        [JsonConstructor]
+
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        [JsonConstructor]
         private Account(Guid id, string name, string emailAddress, string password)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
