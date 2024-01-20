@@ -1,0 +1,40 @@
+﻿@page "/add_product"
+@inject IWebAppHttpClient _httpClient
+<PageTitle>Add Product</PageTitle>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Add Product</h5>
+        <form>
+            <div class="mb-3">
+                <label for="productName" class="form-label">Product Name</label>
+                <input type="text" class="form-control w-25" id="productName" @bind="@_name" placeholder="min-3, max-100 chars">
+            </div>
+            <div class="mb-3">
+                <label for="productPrice" class="form-label">Price</label>
+                <input type="number" class="form-control w-25" id="productPrice" @bind="@_price" step="0.05" min="0.01">
+            </div>
+            <button type="button" class="btn btn-primary" @onclick="AddProduct">Add Product</button>
+            <span class="text-info">@($"{InfoMessage}")</span>
+        </form>
+    </div>
+</div>
+
+@code {
+    private string InfoMessage = string.Empty;
+    private string _name = string.Empty;
+    private decimal _price = 0.01m;
+
+    private async Task AddProduct()
+    {
+        try
+        {
+            await _httpClient.AddProduct(new Product(_name, _price));
+            InfoMessage = "Success";
+        }
+        catch (Exception)
+        {
+            InfoMessage = "Failed";
+        }
+    }
+}

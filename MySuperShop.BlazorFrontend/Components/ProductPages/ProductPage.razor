@@ -1,0 +1,24 @@
+﻿@page "/products/{Id:guid}"
+@inject IWebAppHttpClient _httpClient
+
+<div class="card" style="width: 30rem;">
+    <div class="card-body">
+        <NavLink href="@($"Products/{Product?.Id}")" class="card-title">@Product?.Name</NavLink>
+            <p class="card-text">$@Product?.Price</p>
+        <p class="card-text">Id:{@Product?.Id}</p>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; } 
+    [Parameter]
+    public Product? Product { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        if (Product == null)
+            Product = await _httpClient.GetProduct(Id);
+    }
+}

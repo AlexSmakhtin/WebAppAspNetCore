@@ -1,0 +1,68 @@
+using Serilog;
+using Microsoft.EntityFrameworkCore;
+using MySuperShop.Domain.Repositories.Interfaces;
+using MySuperShop.Domain.Services.Implementations;
+using Microsoft.AspNetCore.Identity;
+using MySuperShop.ApiGateway.Services;
+using MySuperShop.Domain.Entities;
+using MySuperShop.Domain.Services;
+
+namespace MySuperShop.ApiGateway
+{
+    public class Program
+    {
+        public async static Task Main(string[] args)
+        {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .CreateLogger();
+            Log.Information("Server is up");
+            try
+            {
+                var builder = WebApplication.CreateBuilder(args);
+                builder.Host.UseSerilog((ctx, conf) =>
+                {
+                    conf.MinimumLevel.Information()
+                    .WriteTo.Console()
+                    .MinimumLevel.Information();
+                });
+                builder.Services.AddControllers();
+                builder.Services.AddEndpointsApiExplorer();
+                builder.Services.AddSwaggerGen();
+                builder.Services.AddDbContext<MyDbContext>(options =>
+                    options.UseSqlite(builder.Configuration.GetConnectionString("Sqlite")));
+                builder.Services.AddScoped(typeof(IRepository<>), typeof(EFRepository<>));
+                builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+                builder.Services.AddScoped<AccountService>();
+                builder.Services.AddSingleton<IPasswordHasher<Account>, PasswordHasher<Account>>();
+                builder.Services.AddSingleton<IPasswordHasherService, PasswordHasherService>();
+                builder.Services.AddCors();
+                var app = builder.Build();
+                app.UseCors(policy =>
+                {
+                    policy
+                        .AllowAnyMethod()
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader();
+                });
+                app.UseSwagger();
+                app.UseSwaggerUI(options =>
+                {
+                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                    options.RoutePrefix = string.Empty;
+                });
+                app.MapControllers();
+                app.Run();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Unexpected error");
+            }
+            finally
+            {
+                Log.Information("Server shutted down");
+                await Log.CloseAndFlushAsync();
+            }
+        }
+    }
+}

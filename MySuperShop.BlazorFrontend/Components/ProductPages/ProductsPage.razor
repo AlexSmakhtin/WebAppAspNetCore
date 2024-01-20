@@ -1,0 +1,19 @@
+﻿@page "/products"
+@inject IWebAppHttpClient _httpClient
+<PageTitle>Products</PageTitle>
+
+@foreach (var item in _products)
+{
+    <ProductPage Product="@item">
+    </ProductPage>
+    <br/>
+}
+
+@code {
+    private IReadOnlyList<Product> _products { get; set; } = new List<Product>();
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        _products = await _httpClient.GetProducts();
+    }
+}
