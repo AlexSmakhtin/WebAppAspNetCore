@@ -1,5 +1,5 @@
 ﻿@page "/update_product"
-@inject IWebAppHttpClient _httpClient
+@inject IWebAppHttpClient HttpClient
 <PageTitle>Update Product</PageTitle>
 
 <div class="card">
@@ -11,7 +11,7 @@
                 <input type="text" class="form-control w-25" id="productId" @bind="Id" placeholder="Product ID">
             </div>
             <button type="button" class="btn btn-primary" @onclick="SearchProduct">Search</button>
-            <span class="text-info">@($"{InfoMessage1}")</span>
+            <span class="text-info">@($"{_infoMessage1}")</span>
         </form>
     </div>
 </div>
@@ -29,43 +29,44 @@
                 <input type="number" class="form-control w-25" id="productPrice" @bind="@_price" step="0.05" min="0.01">
             </div>
             <button type="button" class="btn btn-primary " @onclick="UpdateProduct">Update Product</button>
-            <span class="text-info">@($"{InfoMessage2}")</span>
+            <span class="text-info">@($"{_infoMessage2}")</span>
         </form>
     </div>
 </div>
 
 @code {
     private Guid Id { get; set; } = Guid.Empty;
-    private string InfoMessage1 = string.Empty;
-    private string InfoMessage2 = string.Empty;
+    private string _infoMessage1 = string.Empty;
+    private string _infoMessage2 = string.Empty;
     private string _class = "d-none";
     private string _name = string.Empty;
     private decimal _price = 0.01m;
-    private Product _product = null!;
-
+    private Product? _product = null!;
+    private readonly CancellationTokenSource _cts = new();
+    
     private async Task UpdateProduct()
     {
         try
         {
-            await _httpClient.UpdateProduct(new Product(_name, _price));
-            InfoMessage2 = "Success";
+            await HttpClient.UpdateProduct(new Product(_name, _price),_cts.Token);
+            _infoMessage2 = "Success";
         }
         catch (Exception)
         {
-            InfoMessage2 = "Failed";
+            _infoMessage2 = "Failed";
         }
     }
     private async Task SearchProduct(MouseEventArgs e)
     {
         try
         {
-            _product = await _httpClient.GetProduct(Id);
-            InfoMessage1 = "Success";
+            _product = await HttpClient.GetProduct(Id,_cts.Token);
+            _infoMessage1 = "Success";
             _class = "card";
         }
         catch (Exception)
         {
-            InfoMessage1 = "Failed";
+            _infoMessage1 = "Failed";
         }
     }
 }

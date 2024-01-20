@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using MySuperShop.Domain.Entities;
 using MySuperShop.Domain.Services;
 
@@ -8,19 +9,19 @@ public class PasswordHasherService : IPasswordHasherService
 {
     private readonly IPasswordHasher<Account> _passwordHasher;
 
-    public PasswordHasherService(IPasswordHasher<Account> passwordHasher)
+    public PasswordHasherService(IOptions<PasswordHasherOptions> options)
     {
-        _passwordHasher = passwordHasher;
+        _passwordHasher = new PasswordHasher<Account>(options);
     }
 
-    public string HashPassword(Account account, string password)
+    public string HashPassword(string password)
     {
-        return _passwordHasher.HashPassword(account, password);
+        return _passwordHasher.HashPassword(null!, password);
     }
 
-    public bool VerifyPassword(Account account, string hashedPassword, string providedPassword)
+    public bool VerifyPassword(string hashedPassword, string providedPassword)
     {
-        var result = _passwordHasher.VerifyHashedPassword(account, hashedPassword, providedPassword);
-        return result == PasswordVerificationResult.Success;
+        var result = _passwordHasher.VerifyHashedPassword(null!, hashedPassword, providedPassword);
+        return result != PasswordVerificationResult.Failed;
     }
 }

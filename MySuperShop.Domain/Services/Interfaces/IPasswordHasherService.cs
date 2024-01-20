@@ -4,6 +4,6 @@ namespace MySuperShop.Domain.Services;
 
 public interface IPasswordHasherService
 {
-    string HashPassword(Account account, string password);
-    bool VerifyPassword(Account account, string hashedPassword, string providedPassword);
+    string HashPassword( string password);
+    bool VerifyPassword( string hashedPassword, string providedPassword);
 }

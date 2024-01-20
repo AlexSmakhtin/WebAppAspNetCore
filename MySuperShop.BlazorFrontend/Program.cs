@@ -1,4 +1,3 @@
-using Frontend;
 using MySuperShop.BlazorFrontend.Services.Implementations;
 using MySuperShop.BlazorFrontend.Services.Interfaces;
 using MySuperShop.HttpClientApi;
@@ -16,7 +15,7 @@ namespace MySuperShop.BlazorFrontend
             builder.RootComponents.Add<App>("#app");
             builder.RootComponents.Add<HeadOutlet>("head::after");
             builder.Services.AddScoped<IWebAppHttpClient, WebAppHttpClient>();
-            builder.Services.AddSingleton<IValidator, RegistrationRequestValidator>();
+            builder.Services.AddSingleton<IValidator, RequestValidator>();
             Log.Logger = new LoggerConfiguration()
             .WriteTo.BrowserConsole()
             .CreateLogger();

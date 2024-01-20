@@ -1,5 +1,6 @@
 ﻿@page "/products/{Id:guid}"
-@inject IWebAppHttpClient _httpClient
+@inject IWebAppHttpClient HttpClient
+@implements IDisposable 
 
 <div class="card" style="width: 30rem;">
     <div class="card-body">
@@ -15,10 +16,16 @@
     [Parameter]
     public Product? Product { get; set; }
 
+    private readonly CancellationTokenSource _cts = new();
+    
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        if (Product == null)
-            Product = await _httpClient.GetProduct(Id);
+        Product ??= await HttpClient.GetProduct(Id, _cts.Token);
+    }
+
+    public void Dispose()
+    {
+        _cts.Dispose();
     }
 }

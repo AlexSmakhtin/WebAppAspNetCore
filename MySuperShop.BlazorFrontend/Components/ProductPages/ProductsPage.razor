@@ -1,8 +1,10 @@
 ﻿@page "/products"
-@inject IWebAppHttpClient _httpClient
+@inject IWebAppHttpClient HttpClient
+@implements IDisposable
+
 <PageTitle>Products</PageTitle>
 
-@foreach (var item in _products)
+@foreach (var item in Products)
 {
     <ProductPage Product="@item">
     </ProductPage>
@@ -10,10 +12,17 @@
 }
 
 @code {
-    private IReadOnlyList<Product> _products { get; set; } = new List<Product>();
+    private readonly CancellationTokenSource _cts = new();
+    private IReadOnlyList<Product> Products { get; set; } = new List<Product>();
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        _products = await _httpClient.GetProducts();
+        Products = await HttpClient.GetProducts(_cts.Token);
     }
+
+    public void Dispose()
+    {
+        _cts.Dispose();
+    }
+
 }

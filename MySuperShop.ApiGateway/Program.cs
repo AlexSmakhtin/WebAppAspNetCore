@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.HttpLogging;
 using Serilog;
 using Microsoft.EntityFrameworkCore;
 using MySuperShop.Domain.Repositories.Interfaces;
@@ -6,12 +7,13 @@ using Microsoft.AspNetCore.Identity;
 using MySuperShop.ApiGateway.Services;
 using MySuperShop.Domain.Entities;
 using MySuperShop.Domain.Services;
+using MySuperShop.ApiGateway.Middleware;
 
 namespace MySuperShop.ApiGateway
 {
     public class Program
     {
-        public async static Task Main(string[] args)
+        public static async Task Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.Console()
@@ -37,6 +39,7 @@ namespace MySuperShop.ApiGateway
                 builder.Services.AddSingleton<IPasswordHasher<Account>, PasswordHasher<Account>>();
                 builder.Services.AddSingleton<IPasswordHasherService, PasswordHasherService>();
                 builder.Services.AddCors();
+                builder.Services.AddHttpLogging(options => options.LoggingFields = HttpLoggingFields.All);
                 var app = builder.Build();
                 app.UseCors(policy =>
                 {
@@ -52,7 +55,8 @@ namespace MySuperShop.ApiGateway
                     options.RoutePrefix = string.Empty;
                 });
                 app.MapControllers();
-                app.Run();
+                //app.UseMiddleware<OnlyEdgeMiddleware>();
+                await app.RunAsync();
             }
             catch (Exception ex)
             {
@@ -60,7 +64,7 @@ namespace MySuperShop.ApiGateway
             }
             finally
             {
-                Log.Information("Server shutted down");
+                Log.Information("Server shutting down");
                 await Log.CloseAndFlushAsync();
             }
         }

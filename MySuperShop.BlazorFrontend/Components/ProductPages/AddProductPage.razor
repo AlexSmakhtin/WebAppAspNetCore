@@ -1,7 +1,8 @@
 ﻿@page "/add_product"
-@inject IWebAppHttpClient _httpClient
-<PageTitle>Add Product</PageTitle>
+@inject IWebAppHttpClient HttpClient
+@implements IDisposable
 
+<PageTitle>Add Product</PageTitle>
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">Add Product</h5>
@@ -15,26 +16,33 @@
                 <input type="number" class="form-control w-25" id="productPrice" @bind="@_price" step="0.05" min="0.01">
             </div>
             <button type="button" class="btn btn-primary" @onclick="AddProduct">Add Product</button>
-            <span class="text-info">@($"{InfoMessage}")</span>
+            <span class="text-info">@($"{_infoMessage}")</span>
         </form>
     </div>
 </div>
 
 @code {
-    private string InfoMessage = string.Empty;
+    private string _infoMessage = string.Empty;
     private string _name = string.Empty;
     private decimal _price = 0.01m;
+    private readonly CancellationTokenSource _cts = new();
 
     private async Task AddProduct()
     {
         try
         {
-            await _httpClient.AddProduct(new Product(_name, _price));
-            InfoMessage = "Success";
+            await HttpClient.AddProduct(new Product(_name, _price), _cts.Token);
+            _infoMessage = "Success";
         }
         catch (Exception)
         {
-            InfoMessage = "Failed";
+            _infoMessage = "Failed";
         }
     }
+
+    public void Dispose()
+    {
+        _cts.Dispose();
+    }
+
 }

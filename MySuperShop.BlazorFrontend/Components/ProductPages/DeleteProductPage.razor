@@ -1,5 +1,7 @@
 ﻿@page "/delete_product"
-@inject IWebAppHttpClient _httpClient
+@inject IWebAppHttpClient HttpClient
+@implements IDisposable
+
 <PageTitle>Delete Product</PageTitle>
 
 <div class="card">
@@ -11,7 +13,7 @@
                 <input type="text" class="form-control w-25" id="productId" @bind="Id" placeholder="Product ID">
             </div>
             <button type="button" class="btn btn-primary" @onclick="SearchProduct">Search</button>
-            <span class="text-info">@($"{InfoMessage1}")</span>
+            <span class="text-info">@($"{_infoMessage1}")</span>
         </form>
     </div>
 </div>
@@ -25,7 +27,7 @@
         </div>
         <div class="d-flex align-items-end m-3">
             <button type="button" class="btn btn-primary " @onclick="DeleteProduct">Delete</button>
-            <span class="text-info">@($"{InfoMessage2}")</span>
+            <span class="text-info">@($"{_infoMessage2}")</span>
         </div>
 
     </div>
@@ -35,34 +37,43 @@
 @code {
     private Guid Id { get; set; } = Guid.Empty;
     private Product? _product = null!;
-    private string InfoMessage1 = string.Empty;
-    private string InfoMessage2 = string.Empty;
+    private string _infoMessage1 = string.Empty;
+    private string _infoMessage2 = string.Empty;
     private string _class = string.Empty;
+    private readonly CancellationTokenSource _cts = new();
+
     private async Task DeleteProduct()
     {
         try
         {
             if (_product == null)
                 throw new NullReferenceException(nameof(_product));
-            await _httpClient.DeleteProduct(_product.Id);
-            InfoMessage2 = "Success";
+            await HttpClient.DeleteProduct(_product.Id, _cts.Token);
+            _infoMessage2 = "Success";
         }
         catch (Exception)
         {
-            InfoMessage2 = "Failed";
+            _infoMessage2 = "Failed";
         }
     }
+
     private async Task SearchProduct(MouseEventArgs e)
     {
         try
         {
-            _product = await _httpClient.GetProduct(Id);
-            InfoMessage1 = "Success";
+            _product = await HttpClient.GetProduct(Id, _cts.Token);
+            _infoMessage1 = "Success";
             _class = string.Empty;
         }
         catch (Exception)
         {
-            InfoMessage1 = "Failed";
+            _infoMessage1 = "Failed";
         }
     }
+
+    public void Dispose()
+    {
+        _cts.Dispose();
+    }
+
 }

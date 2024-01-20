@@ -1,10 +1,6 @@
 ﻿using MySuperShop.Domain.Entities;
 using MySuperShop.Domain.Repositories.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace MySuperShop.ApiGateway.Controllers
 {
@@ -55,8 +51,6 @@ namespace MySuperShop.ApiGateway.Controllers
             try
             {
                 var product = await _productRepo.GetById(id, token);
-                if (product == null)
-                    return NotFound();
                 await _productRepo.Delete(product, token);
                 return Ok();
             }

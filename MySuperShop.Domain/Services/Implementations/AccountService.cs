@@ -28,7 +28,8 @@ namespace MySuperShop.Domain.Services.Implementations
                 await _accountRepository.FindByEmail(email, token);
             if (existedAccount != null)
                 throw new EmailAlreadyExistsException("Email already used");
-            var newAccount = new Account(name, email, password, _passwordHasherService);
+            var hashedPassword = _passwordHasherService.HashPassword(password);
+            var newAccount = new Account(name, email, hashedPassword);
             await _accountRepository.Add(newAccount, token);
             return newAccount;
         }
@@ -44,7 +45,7 @@ namespace MySuperShop.Domain.Services.Implementations
                 await _accountRepository.FindByEmail(email, token);
             if (existedAccount == null)
                 throw new AccountNotFoundException("Account not found");
-            var result = _passwordHasherService.VerifyPassword(existedAccount, existedAccount.HashedPassword, password);
+            var result = _passwordHasherService.VerifyPassword(existedAccount.HashedPassword, password);
             if (result == false)
                 throw new IncorrectPasswordException("Password incorrect");
             return existedAccount;
