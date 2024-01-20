@@ -2,15 +2,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34009.444
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{7525A998-B601-47AE-8D0A-6BAC95AC1829}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySuperShop.Domain", "MySuperShop.Domain\MySuperShop.Domain.csproj", "{7525A998-B601-47AE-8D0A-6BAC95AC1829}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HttpClientApi", "HttpClientApi\HttpClientApi.csproj", "{08F906C5-3442-4127-A8B4-AC894452C121}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySuperShop.HttpClientApi", "MySuperShop.HttpClientApi\MySuperShop.HttpClientApi.csproj", "{08F906C5-3442-4127-A8B4-AC894452C121}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Frontend", "Frontend\Frontend.csproj", "{0BB78F63-6746-4248-A32D-36F20109A42A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySuperShop.BlazorFrontend", "MySuperShop.BlazorFrontend\MySuperShop.BlazorFrontend.csproj", "{0BB78F63-6746-4248-A32D-36F20109A42A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HttpModels", "HttpRequests\HttpModels.csproj", "{AF5E91D8-49FC-449F-AC50-7E81C15332DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySuperShop.ApiGateway", "MySuperShop.ApiGateway\MySuperShop.ApiGateway.csproj", "{39E496B8-568E-4CD8-933D-9691D987C4A3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebGateway", "WebGateway\WebGateway.csproj", "{39E496B8-568E-4CD8-933D-9691D987C4A3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySuperShop.HttpModels", "MySuperShop.HttpModels\MySuperShop.HttpModels.csproj", "{4309E7E5-ACB5-4436-9C85-7A56BE7682FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,14 +30,14 @@ Global
 		{0BB78F63-6746-4248-A32D-36F20109A42A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BB78F63-6746-4248-A32D-36F20109A42A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BB78F63-6746-4248-A32D-36F20109A42A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AF5E91D8-49FC-449F-AC50-7E81C15332DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AF5E91D8-49FC-449F-AC50-7E81C15332DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AF5E91D8-49FC-449F-AC50-7E81C15332DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AF5E91D8-49FC-449F-AC50-7E81C15332DA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{39E496B8-568E-4CD8-933D-9691D987C4A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{39E496B8-568E-4CD8-933D-9691D987C4A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39E496B8-568E-4CD8-933D-9691D987C4A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39E496B8-568E-4CD8-933D-9691D987C4A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4309E7E5-ACB5-4436-9C85-7A56BE7682FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4309E7E5-ACB5-4436-9C85-7A56BE7682FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4309E7E5-ACB5-4436-9C85-7A56BE7682FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4309E7E5-ACB5-4436-9C85-7A56BE7682FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
