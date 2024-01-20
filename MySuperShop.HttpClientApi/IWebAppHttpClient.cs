@@ -1,7 +1,7 @@
-﻿using Domain.Entities;
-using HttpModels;
+﻿using MySuperShop.Domain.Entities;
+using MySuperShop.HttpModels;
 
-namespace HttpClientApi
+namespace MySuperShop.HttpClientApi
 {
     public interface IWebAppHttpClient
     {

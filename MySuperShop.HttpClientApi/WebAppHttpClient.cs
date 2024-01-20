@@ -1,8 +1,8 @@
-﻿using Domain.Entities;
-using HttpModels;
+﻿using MySuperShop.Domain.Entities;
+using MySuperShop.HttpModels;
 using System.Net.Http.Json;
 
-namespace HttpClientApi
+namespace MySuperShop.HttpClientApi
 {
     public class WebAppHttpClient : IWebAppHttpClient, IDisposable
     {

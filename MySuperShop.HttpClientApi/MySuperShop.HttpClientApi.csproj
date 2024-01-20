@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>HttpClientApi</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MySuperShop.Domain\MySuperShop.Domain.csproj" />
+    <ProjectReference Include="..\HttpRequests\MySuperShop.HttpModels.csproj" />
+    <ProjectReference Include="..\MySuperShop.HttpModels\MySuperShop.HttpModels.csproj" />
+  </ItemGroup>
+
+</Project>
