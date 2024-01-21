@@ -38,8 +38,15 @@ namespace MySuperShop.ApiGateway
                 builder.Services.AddScoped<AccountService>();
                 builder.Services.AddSingleton<IPasswordHasher<Account>, PasswordHasher<Account>>();
                 builder.Services.AddSingleton<IPasswordHasherService, PasswordHasherService>();
+                builder.Services.AddSingleton<TrafficMeasurementService>();
                 builder.Services.AddCors();
-                builder.Services.AddHttpLogging(options => options.LoggingFields = HttpLoggingFields.All);
+                builder.Services.AddHttpLogging(options =>
+                {
+                    options.LoggingFields = HttpLoggingFields.RequestHeaders
+                                            | HttpLoggingFields.ResponseHeaders
+                                            | HttpLoggingFields.RequestBody
+                                            | HttpLoggingFields.ResponseBody;
+                });
                 var app = builder.Build();
                 app.UseCors(policy =>
                 {
@@ -56,6 +63,7 @@ namespace MySuperShop.ApiGateway
                 });
                 app.MapControllers();
                 //app.UseMiddleware<OnlyEdgeMiddleware>();
+                app.UseMiddleware<TrafficCounterMiddleware>();
                 await app.RunAsync();
             }
             catch (Exception ex)

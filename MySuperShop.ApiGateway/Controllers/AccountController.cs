@@ -1,5 +1,4 @@
-﻿using MySuperShop.Domain.Entities;
-using MySuperShop.Domain.Exceptions;
+﻿using MySuperShop.Domain.Exceptions;
 using MySuperShop.Domain.Services.Implementations;
 using Microsoft.AspNetCore.Mvc;
 using MySuperShop.HttpModels;

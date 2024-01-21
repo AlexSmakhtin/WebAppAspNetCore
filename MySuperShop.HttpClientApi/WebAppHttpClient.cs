@@ -1,4 +1,5 @@
-﻿using MySuperShop.Domain.Entities;
+﻿using System.Collections.Concurrent;
+using MySuperShop.Domain.Entities;
 using MySuperShop.HttpModels;
 using System.Net.Http.Json;
 
@@ -63,7 +64,8 @@ namespace MySuperShop.HttpClientApi
             var uri = $"{_host}/api/account/register";
             using var response = await _httpClient.PostAsJsonAsync(uri, request, cancellationToken: ct);
             response.EnsureSuccessStatusCode();
-            var registrationResponse = await response.Content.ReadFromJsonAsync<RegistrationResponse>(cancellationToken: ct);
+            var registrationResponse =
+                await response.Content.ReadFromJsonAsync<RegistrationResponse>(cancellationToken: ct);
             if (registrationResponse == null)
                 throw new NullReferenceException(nameof(registrationResponse));
             return registrationResponse;
@@ -79,6 +81,18 @@ namespace MySuperShop.HttpClientApi
             if (authResponse == null)
                 throw new NullReferenceException(nameof(authResponse));
             return authResponse;
+        }
+
+        public async Task<Dictionary<string, int>> GetTraffic(CancellationToken ct)
+        {
+            var uri = $"{_host}/api/traffic/get";
+            using var response = await _httpClient.GetAsync(uri, cancellationToken: ct);
+            response.EnsureSuccessStatusCode();
+            var traffic =
+                await response.Content.ReadFromJsonAsync<Dictionary<string, int>>(cancellationToken: ct);
+            if (traffic == null)
+                throw new NullReferenceException(nameof(traffic));
+            return traffic;
         }
 
         public void Dispose()
