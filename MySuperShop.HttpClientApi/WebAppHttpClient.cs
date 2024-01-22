@@ -1,7 +1,8 @@
-﻿using System.Collections.Concurrent;
-using MySuperShop.Domain.Entities;
+﻿using MySuperShop.Domain.Entities;
 using MySuperShop.HttpModels;
 using System.Net.Http.Json;
+using MySuperShop.Domain.Exceptions;
+using MySuperShop.HttpClientApi.Extensions;
 
 namespace MySuperShop.HttpClientApi
 {
@@ -22,7 +23,7 @@ namespace MySuperShop.HttpClientApi
             var uri = $"{_host}/api/products/get?id={id}";
             var product = await _httpClient.GetFromJsonAsync<Product>(uri, cancellationToken: ct);
             if (product == null)
-                throw new NullReferenceException(nameof(product));
+                throw new MySuperShopException("Product is null");
             return product;
         }
 
@@ -31,7 +32,7 @@ namespace MySuperShop.HttpClientApi
             var uri = $"{_host}/api/products/get_all";
             var response = await _httpClient.GetFromJsonAsync<IReadOnlyList<Product>>(uri, cancellationToken: ct);
             if (response == null)
-                throw new NullReferenceException(nameof(response));
+                throw new MySuperShopException("List products is null");
             return response;
         }
 
@@ -62,25 +63,22 @@ namespace MySuperShop.HttpClientApi
         {
             ArgumentNullException.ThrowIfNull(request);
             var uri = $"{_host}/api/account/register";
-            using var response = await _httpClient.PostAsJsonAsync(uri, request, cancellationToken: ct);
-            response.EnsureSuccessStatusCode();
-            var registrationResponse =
-                await response.Content.ReadFromJsonAsync<RegistrationResponse>(cancellationToken: ct);
-            if (registrationResponse == null)
-                throw new NullReferenceException(nameof(registrationResponse));
-            return registrationResponse;
+            var response =
+                await _httpClient.PostAsJsonAsync<RegistrationRequest, RegistrationResponse>(uri, request, ct);
+            if (response == null)
+                throw new MySuperShopException("Registration response is null");
+            return response;
         }
 
         public async Task<AuthenticationResponse> Authenticate(AuthenticationRequest request, CancellationToken ct)
         {
             ArgumentNullException.ThrowIfNull(request);
             var uri = $"{_host}/api/account/authentication";
-            using var response = await _httpClient.PostAsJsonAsync(uri, request, cancellationToken: ct);
-            response.EnsureSuccessStatusCode();
-            var authResponse = await response.Content.ReadFromJsonAsync<AuthenticationResponse>(cancellationToken: ct);
-            if (authResponse == null)
-                throw new NullReferenceException(nameof(authResponse));
-            return authResponse;
+            var response =
+                await _httpClient.PostAsJsonAsync<AuthenticationRequest, AuthenticationResponse>(uri, request, ct);
+            if (response == null)
+                throw new MySuperShopException("Authentication response is null");
+            return response;
         }
 
         public async Task<Dictionary<string, int>> GetTraffic(CancellationToken ct)
@@ -91,7 +89,7 @@ namespace MySuperShop.HttpClientApi
             var traffic =
                 await response.Content.ReadFromJsonAsync<Dictionary<string, int>>(cancellationToken: ct);
             if (traffic == null)
-                throw new NullReferenceException(nameof(traffic));
+                throw new MySuperShopException("Traffic dictionary is null");
             return traffic;
         }
 
