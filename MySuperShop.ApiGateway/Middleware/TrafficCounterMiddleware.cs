@@ -6,7 +6,6 @@ public class TrafficCounterMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly ILogger<TrafficCounterMiddleware> _logger;
-    private readonly object _lockObject = new();
     private readonly TrafficMeasurementService _trafficMeasurementService;
 
     public TrafficCounterMiddleware(
