@@ -48,6 +48,7 @@ namespace MySuperShop.ApiGateway
                                             | HttpLoggingFields.ResponseBody;
                 });
                 var app = builder.Build();
+                app.UseHttpLogging();
                 app.UseCors(policy =>
                 {
                     policy

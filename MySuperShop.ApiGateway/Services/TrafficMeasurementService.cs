@@ -21,9 +21,6 @@ public class TrafficMeasurementService
 
     public Dictionary<string, int> GetTraffic()
     {
-        lock (_lockObject)
-        {
-            return new Dictionary<string, int>(_pathCounter);
-        }
+        return new Dictionary<string, int>(_pathCounter);
     }
 }
