@@ -1,1 +1,1 @@
-Учебный проект по asp.net core
+Educational project on asp.net core
