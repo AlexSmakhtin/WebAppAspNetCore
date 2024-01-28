@@ -3,11 +3,10 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>WebGateway</RootNamespace>
+    <RootNamespace>ApiGateway</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\MySuperShop.Domain\MySuperShop.Domain.csproj" />
-    <ProjectReference Include="..\HttpRequests\MySuperShop.HttpModels.csproj" />
     <ProjectReference Include="..\MySuperShop.HttpModels\MySuperShop.HttpModels.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -18,7 +17,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Serilog" Version="3.1.1" />
+    <PackageReference Include="Serilog" Version="3.1.2-dev-02097" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
     <PackageReference Include="SQLite" Version="3.13.0" />

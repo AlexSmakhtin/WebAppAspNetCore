@@ -4,10 +4,13 @@ using Microsoft.EntityFrameworkCore;
 using MySuperShop.Domain.Repositories.Interfaces;
 using MySuperShop.Domain.Services.Implementations;
 using Microsoft.AspNetCore.Identity;
+using MySuperShop.ApiGateway.DbContexts;
 using MySuperShop.ApiGateway.Services;
 using MySuperShop.Domain.Entities;
 using MySuperShop.Domain.Services;
 using MySuperShop.ApiGateway.Middleware;
+using MySuperShop.ApiGateway.Repositories;
+using WebGateway.Services;
 
 namespace MySuperShop.ApiGateway
 {
@@ -22,23 +25,24 @@ namespace MySuperShop.ApiGateway
             try
             {
                 var builder = WebApplication.CreateBuilder(args);
-                builder.Host.UseSerilog((ctx, conf) =>
+                builder.Host.UseSerilog((hbc, conf) =>
                 {
                     conf.MinimumLevel.Information()
-                    .WriteTo.Console()
-                    .MinimumLevel.Information();
+                        .WriteTo.Console()
+                        .MinimumLevel.Information();
                 });
                 builder.Services.AddControllers();
                 builder.Services.AddEndpointsApiExplorer();
                 builder.Services.AddSwaggerGen();
                 builder.Services.AddDbContext<MyDbContext>(options =>
                     options.UseSqlite(builder.Configuration.GetConnectionString("Sqlite")));
-                builder.Services.AddScoped(typeof(IRepository<>), typeof(EFRepository<>));
+                builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
                 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+                builder.Services.AddScoped<ITrafficRepository, TrafficRepository>();
                 builder.Services.AddScoped<AccountService>();
                 builder.Services.AddSingleton<IPasswordHasher<Account>, PasswordHasher<Account>>();
                 builder.Services.AddSingleton<IPasswordHasherService, PasswordHasherService>();
-                builder.Services.AddSingleton<TrafficMeasurementService>();
+                builder.Services.AddSingleton<ITrafficMeasurementService, TrafficMeasurementService>();
                 builder.Services.AddCors();
                 builder.Services.AddHttpLogging(options =>
                 {

@@ -1,26 +1,47 @@
-using System.Collections.Concurrent;
+using MySuperShop.Domain.Entities;
+using MySuperShop.Domain.Repositories.Interfaces;
+using MySuperShop.Domain.Services;
 
-namespace MySuperShop.ApiGateway.Services;
+namespace WebGateway.Services;
 
-public class TrafficMeasurementService
+public class TrafficMeasurementService : ITrafficMeasurementService
 {
-    private readonly ConcurrentDictionary<string, int> _pathCounter = new();
     private readonly ILogger<TrafficMeasurementService> _logger;
-    private readonly object _lockObject = new();
+    private readonly SemaphoreSlim _semaphoreSlim = new(1);
 
     public TrafficMeasurementService(ILogger<TrafficMeasurementService> logger)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public void TryAddOrUpdate(PathString pathString)
+    public async Task AddOrUpdate(string path, ITrafficRepository trafficRepository, CancellationToken ct)
     {
-        ArgumentNullException.ThrowIfNull(pathString);
-        _pathCounter.AddOrUpdate(pathString.ToString(), 1, (path, count) => count + 1);
+        ArgumentNullException.ThrowIfNull(path);
+        if (string.IsNullOrWhiteSpace(path))
+            throw new ArgumentException("Path must be not empty", path);
+        await _semaphoreSlim.WaitAsync(ct);
+        try
+        {
+            var existedTrafficIfo = await trafficRepository.FindByPath(path, ct);
+            if (existedTrafficIfo == null)
+            {
+                var trafficInfo = new TrafficInfo(path);
+                await trafficRepository.Add(trafficInfo, ct);
+                return;
+            }
+
+            existedTrafficIfo.CountOfVisits++;
+            await trafficRepository.Update(existedTrafficIfo, ct);
+        }
+        finally
+        {
+            _semaphoreSlim.Release();
+        }
     }
 
-    public Dictionary<string, int> GetTraffic()
+    public async Task<List<TrafficInfo>> GetTrafficInfo(ITrafficRepository trafficRepository, CancellationToken ct)
     {
-        return new Dictionary<string, int>(_pathCounter);
+        var collection = await trafficRepository.GetAll(ct);
+        return collection.ToList();
     }
 }

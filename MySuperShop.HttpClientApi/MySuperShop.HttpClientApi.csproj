@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MySuperShop.Domain\MySuperShop.Domain.csproj" />
-    <ProjectReference Include="..\HttpRequests\MySuperShop.HttpModels.csproj" />
     <ProjectReference Include="..\MySuperShop.HttpModels\MySuperShop.HttpModels.csproj" />
   </ItemGroup>
 

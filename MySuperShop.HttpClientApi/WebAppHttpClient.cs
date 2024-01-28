@@ -81,15 +81,15 @@ namespace MySuperShop.HttpClientApi
             return response;
         }
 
-        public async Task<Dictionary<string, int>> GetTraffic(CancellationToken ct)
+        public async Task<List<TrafficInfo>> GetTraffic(CancellationToken ct)
         {
             var uri = $"{_host}/api/traffic/get";
             using var response = await _httpClient.GetAsync(uri, cancellationToken: ct);
             response.EnsureSuccessStatusCode();
             var traffic =
-                await response.Content.ReadFromJsonAsync<Dictionary<string, int>>(cancellationToken: ct);
+                await response.Content.ReadFromJsonAsync<List<TrafficInfo>>(cancellationToken: ct);
             if (traffic == null)
-                throw new MySuperShopException("Traffic dictionary is null");
+                throw new MySuperShopException("Traffic list is null");
             return traffic;
         }
 

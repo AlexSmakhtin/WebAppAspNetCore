@@ -1,5 +1,4 @@
 ﻿using MySuperShop.BlazorFrontend.Services.Interfaces;
-using MySuperShop.HttpModels;
 using System.ComponentModel.DataAnnotations;
 
 namespace MySuperShop.BlazorFrontend.Services.Implementations

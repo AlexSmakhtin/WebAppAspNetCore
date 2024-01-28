@@ -1,6 +1,5 @@
 using System.Net;
 using System.Net.Http.Json;
-using Microsoft.AspNetCore.Mvc;
 using MySuperShop.Domain.Exceptions;
 
 namespace MySuperShop.HttpClientApi.Extensions;
@@ -15,7 +14,7 @@ public static class HttpClientExtensions
             return await response.Content.ReadFromJsonAsync<TResponse>(cancellationToken: ct);
         if (response.StatusCode == HttpStatusCode.BadRequest)
         {
-            var details = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>(cancellationToken: ct);
+            var details = await response.Content.ReadAsStringAsync(cancellationToken: ct);
             throw new MySuperShopException(response.StatusCode, details);
         }
 

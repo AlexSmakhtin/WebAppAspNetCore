@@ -4,7 +4,7 @@
 
 <div class="container">
     <h3>Traffic info</h3>
-    
+
     <table class="table table-striped">
         <thead>
         <tr>
@@ -16,8 +16,8 @@
         @foreach (var item in _trafficInfo)
         {
             <tr>
-                <td>@item.Key</td>
-                <td>@item.Value</td>
+                <td>@item.Path</td>
+                <td>@item.CountOfVisits</td>
             </tr>
         }
         </tbody>
@@ -25,13 +25,13 @@
 </div>
 
 @code {
-    private Dictionary<string, int> _trafficInfo = new();
+    private List<TrafficInfo> _trafficInfo = new();
     private readonly CancellationTokenSource _cts = new();
-    
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        _trafficInfo = await HttpClient.GetTraffic( _cts.Token);
+        _trafficInfo = await HttpClient.GetTraffic(_cts.Token);
     }
 
     public void Dispose()

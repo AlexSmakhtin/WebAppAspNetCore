@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace MySuperShop.Domain.Entities
+﻿namespace MySuperShop.Domain.Entities
 {
     public class Product: IEntity
     {

@@ -12,7 +12,7 @@ namespace MySuperShop.HttpClientApi
         Task DeleteProduct(Guid id, CancellationToken cts);
         Task<RegistrationResponse> Register(RegistrationRequest request, CancellationToken cts);
         Task<AuthenticationResponse> Authenticate(AuthenticationRequest request, CancellationToken cts);
-        Task<Dictionary<string, int>> GetTraffic(CancellationToken ct);
+        Task<List<TrafficInfo>> GetTraffic(CancellationToken ct);
 
     }
 }

@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using MySuperShop.ApiGateway.Services;
+using MySuperShop.Domain.Entities;
+using MySuperShop.Domain.Repositories.Interfaces;
+using MySuperShop.Domain.Services;
 
 namespace MySuperShop.ApiGateway.Controllers;
 
@@ -8,19 +10,28 @@ namespace MySuperShop.ApiGateway.Controllers;
 public class TrafficController : ControllerBase
 {
     private readonly ILogger<TrafficController> _logger;
-    private readonly TrafficMeasurementService _trafficMeasurementService;
+    private readonly SemaphoreSlim _semaphoreSlim = new(1);
 
-    public TrafficController(ILogger<TrafficController> logger, TrafficMeasurementService trafficMeasurementService)
+    public TrafficController(ILogger<TrafficController> logger)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _trafficMeasurementService = trafficMeasurementService ??
-                                     throw new ArgumentNullException(nameof(trafficMeasurementService));
     }
 
     [HttpGet("get")]
-    public Task<ActionResult<Dictionary<string, int>>> GetTraffic()
+    public async Task<ActionResult<List<TrafficInfo>>> GetTraffic(
+        ITrafficMeasurementService trafficMeasurementService,
+        ITrafficRepository trafficRepository,
+        CancellationToken ct)
     {
-        var trafficDict = _trafficMeasurementService.GetTraffic();
-        return Task.FromResult<ActionResult<Dictionary<string, int>>>(trafficDict);
+        await _semaphoreSlim.WaitAsync(ct);
+        try
+        {
+            var traffic = await trafficMeasurementService.GetTrafficInfo(trafficRepository, ct);
+            return traffic;
+        }
+        finally
+        {
+            _semaphoreSlim.Release();
+        }
     }
 }

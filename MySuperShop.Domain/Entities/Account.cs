@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using MySuperShop.Domain.Services;
 
 namespace MySuperShop.Domain.Entities
 {
