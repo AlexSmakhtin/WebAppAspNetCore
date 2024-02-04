@@ -24,6 +24,7 @@ public class TrafficCounterMiddleware
         HttpContext context,
         ITrafficRepository trafficRepository)
     {
+        ArgumentNullException.ThrowIfNull(trafficRepository);
         await _trafficMeasurementService.AddOrUpdate(context.Request.Path, trafficRepository, CancellationToken.None);
         await _next(context);
     }

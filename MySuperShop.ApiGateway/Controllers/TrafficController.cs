@@ -22,6 +22,8 @@ public class TrafficController : ControllerBase
         ITrafficRepository trafficRepository,
         CancellationToken ct)
     {
+        ArgumentNullException.ThrowIfNull(trafficMeasurementService);
+        ArgumentNullException.ThrowIfNull(trafficRepository);
         var traffic = await trafficMeasurementService.GetTrafficInfo(trafficRepository, ct);
         return traffic;
     }

@@ -16,6 +16,7 @@ public class TrafficMeasurementService : ITrafficMeasurementService
 
     public async Task AddOrUpdate(string path, ITrafficRepository trafficRepository, CancellationToken ct)
     {
+        ArgumentNullException.ThrowIfNull(trafficRepository);
         ArgumentNullException.ThrowIfNull(path);
         if (string.IsNullOrWhiteSpace(path))
             throw new ArgumentException("Path must be not empty", path);
@@ -40,6 +41,7 @@ public class TrafficMeasurementService : ITrafficMeasurementService
 
     public async Task<List<TrafficInfo>> GetTrafficInfo(ITrafficRepository trafficRepository, CancellationToken ct)
     {
+        ArgumentNullException.ThrowIfNull(trafficRepository);
         await _semaphoreSlim.WaitAsync(ct);
         try
         {
