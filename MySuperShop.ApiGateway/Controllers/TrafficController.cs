@@ -10,7 +10,6 @@ namespace MySuperShop.ApiGateway.Controllers;
 public class TrafficController : ControllerBase
 {
     private readonly ILogger<TrafficController> _logger;
-    private readonly SemaphoreSlim _semaphoreSlim = new(1);
 
     public TrafficController(ILogger<TrafficController> logger)
     {
@@ -23,15 +22,7 @@ public class TrafficController : ControllerBase
         ITrafficRepository trafficRepository,
         CancellationToken ct)
     {
-        await _semaphoreSlim.WaitAsync(ct);
-        try
-        {
-            var traffic = await trafficMeasurementService.GetTrafficInfo(trafficRepository, ct);
-            return traffic;
-        }
-        finally
-        {
-            _semaphoreSlim.Release();
-        }
+        var traffic = await trafficMeasurementService.GetTrafficInfo(trafficRepository, ct);
+        return traffic;
     }
 }

@@ -2,7 +2,7 @@ using MySuperShop.Domain.Entities;
 using MySuperShop.Domain.Repositories.Interfaces;
 using MySuperShop.Domain.Services;
 
-namespace WebGateway.Services;
+namespace MySuperShop.ApiGateway.Services;
 
 public class TrafficMeasurementService : ITrafficMeasurementService
 {
@@ -29,7 +29,6 @@ public class TrafficMeasurementService : ITrafficMeasurementService
                 await trafficRepository.Add(trafficInfo, ct);
                 return;
             }
-
             existedTrafficIfo.CountOfVisits++;
             await trafficRepository.Update(existedTrafficIfo, ct);
         }
@@ -41,7 +40,15 @@ public class TrafficMeasurementService : ITrafficMeasurementService
 
     public async Task<List<TrafficInfo>> GetTrafficInfo(ITrafficRepository trafficRepository, CancellationToken ct)
     {
-        var collection = await trafficRepository.GetAll(ct);
-        return collection.ToList();
+        await _semaphoreSlim.WaitAsync(ct);
+        try
+        {
+            var collection = await trafficRepository.GetAll(ct);
+            return collection.ToList();
+        }
+        finally
+        {
+            _semaphoreSlim.Release();
+        }
     }
 }

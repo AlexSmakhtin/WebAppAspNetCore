@@ -10,7 +10,6 @@ using MySuperShop.Domain.Entities;
 using MySuperShop.Domain.Services;
 using MySuperShop.ApiGateway.Middleware;
 using MySuperShop.ApiGateway.Repositories;
-using WebGateway.Services;
 
 namespace MySuperShop.ApiGateway
 {
