@@ -1,10 +1,12 @@
+using ApiGateway.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MySuperShop.Domain.Entities;
 using MySuperShop.Domain.Repositories.Interfaces;
 using MySuperShop.Domain.Services;
 
 namespace MySuperShop.ApiGateway.Controllers;
-
+[Authorize]
 [Route("api/traffic")]
 [ApiController]
 public class TrafficController : ControllerBase
@@ -17,7 +19,7 @@ public class TrafficController : ControllerBase
     }
 
     [HttpGet("get")]
-    public async Task<ActionResult<List<TrafficInfo>>> GetTraffic(
+    public async Task<ActionResult<IReadOnlyCollection<TrafficInfo>>> GetTraffic(
         ITrafficMeasurementService trafficMeasurementService,
         ITrafficRepository trafficRepository,
         CancellationToken ct)
@@ -25,6 +27,6 @@ public class TrafficController : ControllerBase
         ArgumentNullException.ThrowIfNull(trafficMeasurementService);
         ArgumentNullException.ThrowIfNull(trafficRepository);
         var traffic = await trafficMeasurementService.GetTrafficInfo(trafficRepository, ct);
-        return traffic;
+        return Ok(traffic);
     }
 }

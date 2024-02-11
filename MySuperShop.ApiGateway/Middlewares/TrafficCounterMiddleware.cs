@@ -1,3 +1,6 @@
+using ApiGateway.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using MySuperShop.ApiGateway.DbContexts;
 using MySuperShop.Domain.Repositories.Interfaces;
 using MySuperShop.Domain.Services;
 
@@ -20,12 +23,10 @@ public class TrafficCounterMiddleware
                                      throw new ArgumentNullException(nameof(trafficMeasurementService));
     }
 
-    public async Task InvokeAsync(
-        HttpContext context,
-        ITrafficRepository trafficRepository)
+    public async Task InvokeAsync(HttpContext httpContext, MyDbContext dbContext)
     {
-        ArgumentNullException.ThrowIfNull(trafficRepository);
-        await _trafficMeasurementService.AddOrUpdate(context.Request.Path, trafficRepository, CancellationToken.None);
-        await _next(context);
+        ArgumentNullException.ThrowIfNull(dbContext);
+        await _trafficMeasurementService.AddOrUpdate(httpContext.Request.Path, dbContext, CancellationToken.None);
+        await _next(httpContext);
     }
 }

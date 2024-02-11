@@ -1,4 +1,5 @@
-﻿using MySuperShop.Domain.Entities;
+﻿using System.Net.Http.Headers;
+using MySuperShop.Domain.Entities;
 using MySuperShop.HttpModels;
 using System.Net.Http.Json;
 using MySuperShop.Domain.Exceptions;
@@ -78,19 +79,39 @@ namespace MySuperShop.HttpClientApi
                 await _httpClient.PostAsJsonAsync<AuthenticationRequest, AuthenticationResponse>(uri, request, ct);
             if (response == null)
                 throw new MySuperShopException("Authentication response is null");
+
+            SetAuthorizationToken(response.Jwt);
             return response;
         }
 
-        public async Task<List<TrafficInfo>> GetTraffic(CancellationToken ct)
+        private void SetAuthorizationToken(string responseJwt)
+        {
+            ArgumentNullException.ThrowIfNull(responseJwt);
+            var headerValue = new AuthenticationHeaderValue("Bearer", responseJwt);
+            _httpClient.DefaultRequestHeaders.Authorization = headerValue;
+        }
+
+        public async Task<IReadOnlyCollection<TrafficInfo>> GetTraffic(CancellationToken ct)
         {
             var uri = $"{_host}/api/traffic/get";
             using var response = await _httpClient.GetAsync(uri, cancellationToken: ct);
             response.EnsureSuccessStatusCode();
             var traffic =
-                await response.Content.ReadFromJsonAsync<List<TrafficInfo>>(cancellationToken: ct);
+                await response.Content.ReadFromJsonAsync<IReadOnlyCollection<TrafficInfo>>(cancellationToken: ct);
             if (traffic == null)
                 throw new MySuperShopException("Traffic list is null");
             return traffic;
+        }
+
+        public async Task<Account> GetCurrentAccount(CancellationToken ct)
+        {
+            var uri = $"{_host}/api/account/get_current";
+            using var response = await _httpClient.GetAsync(uri, cancellationToken: ct);
+            response.EnsureSuccessStatusCode();
+            var account = await response.Content.ReadFromJsonAsync<Account>(cancellationToken: ct);
+            if(account == null)
+                throw new MySuperShopException("Account is null");
+            return account;
         }
 
         public void Dispose()

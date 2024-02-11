@@ -2,6 +2,7 @@
 @inject IWebAppHttpClient HttpClient
 @inject IValidator Validator
 @implements IDisposable
+@inject IJSRuntime JSRuntime
 
 <PageTitle>Authentication</PageTitle>
 
@@ -25,6 +26,9 @@
     private string _infoMessage = string.Empty;
     private readonly CancellationTokenSource _cts = new();
 
+    [CascadingParameter]
+    protected bool IsAuthenticated { get; set; }
+    
     private async Task Authenticate()
     {
         try
@@ -35,8 +39,11 @@
                 Password = _password
             };
             Validator.Validate<AuthenticationRequest>(authRequest);
-            await HttpClient.Authenticate(authRequest, _cts.Token);
+            var response = await HttpClient.Authenticate(authRequest, _cts.Token);
+            var jwt = response.Jwt;
+            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "jwt", jwt);
             _infoMessage = $"Success auth.";
+            IsAuthenticated = true;
         }
         catch (Exception ex)
         {

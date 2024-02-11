@@ -1,6 +1,10 @@
-﻿using MySuperShop.Domain.Exceptions;
+﻿using System.Security.Claims;
+using ApiGateway.Services.Implementations;
+using Microsoft.AspNetCore.Authorization;
+using MySuperShop.Domain.Exceptions;
 using MySuperShop.Domain.Services.Implementations;
 using Microsoft.AspNetCore.Mvc;
+using MySuperShop.Domain.Entities;
 using MySuperShop.HttpModels;
 
 namespace MySuperShop.ApiGateway.Controllers
@@ -23,7 +27,7 @@ namespace MySuperShop.ApiGateway.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<RegistrationResponse>> Register(
             RegistrationRequest request,
-            CancellationToken token)
+            CancellationToken ct)
         {
             try
             {
@@ -32,7 +36,7 @@ namespace MySuperShop.ApiGateway.Controllers
                     request.Name,
                     request.Email,
                     request.Password,
-                    token);
+                    ct);
                 return new RegistrationResponse(newAccount.Name, newAccount.EmailAddress);
             }
             catch (EmailAlreadyExistsException)
@@ -44,7 +48,8 @@ namespace MySuperShop.ApiGateway.Controllers
         [HttpPost("authentication")]
         public async Task<ActionResult<AuthenticationResponse>> Authentication(
             AuthenticationRequest request,
-            CancellationToken token)
+            [FromServices] JwtService jwtService,
+            CancellationToken ct)
         {
             try
             {
@@ -52,8 +57,9 @@ namespace MySuperShop.ApiGateway.Controllers
                 var existedAccount = await _accountService.Authenticate(
                     request.Email,
                     request.Password,
-                    token);
-                return new AuthenticationResponse(existedAccount.EmailAddress);
+                    ct);
+                var jwt = jwtService.GenerateToken(existedAccount);
+                return new AuthenticationResponse(existedAccount.EmailAddress, jwt);
             }
             catch (AccountNotFoundException)
             {
@@ -63,6 +69,18 @@ namespace MySuperShop.ApiGateway.Controllers
             {
                 return Unauthorized("Invalid password");
             }
+        }
+
+        [Authorize]
+        [HttpGet("get_current")]
+        public async Task<ActionResult<Account>> GetCurrentAccount(CancellationToken ct)
+        {
+            var userIdStr = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userIdStr == null)
+                return NotFound("User id not found");
+            var accId = Guid.Parse(userIdStr);
+            var currentAccount = await _accountService.GetCurrentAccount(accId, ct);
+            return currentAccount;
         }
     }
 }

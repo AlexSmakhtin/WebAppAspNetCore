@@ -1,9 +1,11 @@
-﻿using MySuperShop.Domain.Entities;
+﻿using Microsoft.AspNetCore.Authorization;
+using MySuperShop.Domain.Entities;
 using MySuperShop.Domain.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MySuperShop.ApiGateway.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/products")]
     public class ProductController : ControllerBase

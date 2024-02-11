@@ -50,5 +50,11 @@ namespace MySuperShop.Domain.Services.Implementations
                 throw new IncorrectPasswordException("Password incorrect");
             return existedAccount;
         }
+
+        public async Task<Account> GetCurrentAccount(Guid id, CancellationToken ct)
+        {
+            var account = await _accountRepository.GetById(id, ct);
+            return account;
+        }
     }
 }

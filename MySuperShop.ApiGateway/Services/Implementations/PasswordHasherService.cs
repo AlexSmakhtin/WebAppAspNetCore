@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using MySuperShop.Domain.Entities;
 using MySuperShop.Domain.Services;
 
-namespace MySuperShop.ApiGateway.Services;
+namespace ApiGateway.Services.Implementations;
 
 public class PasswordHasherService : IPasswordHasherService
 {

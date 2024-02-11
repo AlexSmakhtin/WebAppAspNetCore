@@ -1,5 +1,6 @@
 ﻿@inherits LayoutComponentBase
 @namespace MySuperShop.BlazorFrontend.Layout
+@inject IJSRuntime JsRuntime
 
 <div class="container-fluid">
     <div class="row">
@@ -26,31 +27,31 @@
                         </NavLink>
                     </li>
                     <li class="nav-item">
-                        <NavLink class="nav-link" href="products">
+                        <NavLink class="@{Disabled}" href="products">
                             <span data-feather="file"></span>
                             Products
                         </NavLink>
                     </li>
                     <li class="nav-item">
-                        <NavLink class="nav-link" href="add_product">
+                        <NavLink class="@{Disabled}" href="add_product">
                             <span data-feather="file"></span>
                             Add product
                         </NavLink>
                     </li>
                     <li class="nav-item">
-                        <NavLink class="nav-link" href="delete_product">
+                        <NavLink class="@{Disabled}" href="delete_product">
                             <span data-feather="file"></span>
                             Delete product
                         </NavLink>
                     </li>
                     <li class="nav-item">
-                        <NavLink class="nav-link" href="update_product">
+                        <NavLink class="@{Disabled}" href="update_product">
                             <span data-feather="file"></span>
                             Update product
                         </NavLink>
                     </li>
                     <li class="nav-item">
-                        <NavLink class="nav-link" href="traffic">
+                        <NavLink class="@{Disabled}" href="traffic">
                             <span data-feather="file"></span>
                             Traffic info
                         </NavLink>
@@ -67,3 +68,15 @@
         </main>
     </div>
 </div>
+
+@code
+{
+    public bool IsAuthenticate { get; set; } = false;
+    private string Disabled => IsAuthenticate == false ? "nav-link disabled" : "nav-link";
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var token = await JsRuntime.InvokeAsync<string>("localStorage.getItem", "jwt");
+        IsAuthenticate = !string.IsNullOrWhiteSpace(token);
+    }
+}

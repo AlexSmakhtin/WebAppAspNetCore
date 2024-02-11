@@ -4,12 +4,14 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>ApiGateway</RootNamespace>
+    <UserSecretsId>83885c71-93c6-484f-a508-f9c514d12a8c</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\MySuperShop.Domain\MySuperShop.Domain.csproj" />
     <ProjectReference Include="..\MySuperShop.HttpModels\MySuperShop.HttpModels.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.1" />
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0" />
