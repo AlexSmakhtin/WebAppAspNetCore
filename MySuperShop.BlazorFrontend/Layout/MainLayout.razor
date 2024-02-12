@@ -27,33 +27,39 @@
                         </NavLink>
                     </li>
                     <li class="nav-item">
-                        <NavLink class="@{Disabled}" href="products">
+                        <NavLink class="@{NavLinkClass}" href="products">
                             <span data-feather="file"></span>
                             Products
                         </NavLink>
                     </li>
                     <li class="nav-item">
-                        <NavLink class="@{Disabled}" href="add_product">
+                        <NavLink class="@{NavLinkClass}" href="add_product">
                             <span data-feather="file"></span>
                             Add product
                         </NavLink>
                     </li>
                     <li class="nav-item">
-                        <NavLink class="@{Disabled}" href="delete_product">
+                        <NavLink class="@{NavLinkClass}" href="delete_product">
                             <span data-feather="file"></span>
                             Delete product
                         </NavLink>
                     </li>
                     <li class="nav-item">
-                        <NavLink class="@{Disabled}" href="update_product">
+                        <NavLink class="@{NavLinkClass}" href="update_product">
                             <span data-feather="file"></span>
                             Update product
                         </NavLink>
                     </li>
                     <li class="nav-item">
-                        <NavLink class="@{Disabled}" href="traffic">
+                        <NavLink class="@{NavLinkClass}" href="traffic">
                             <span data-feather="file"></span>
                             Traffic info
+                        </NavLink>
+                    </li>
+                    <li class="nav-item">
+                        <NavLink class="@{NavLinkClass}" href="currentAccount">
+                            <span data-feather="file"></span>
+                            Current account
                         </NavLink>
                     </li>
                 </ul>
@@ -71,12 +77,5 @@
 
 @code
 {
-    public bool IsAuthenticate { get; set; } = false;
-    private string Disabled => IsAuthenticate == false ? "nav-link disabled" : "nav-link";
-    
-    protected override async Task OnInitializedAsync()
-    {
-        var token = await JsRuntime.InvokeAsync<string>("localStorage.getItem", "jwt");
-        IsAuthenticate = !string.IsNullOrWhiteSpace(token);
-    }
+    private string NavLinkClass { get; set; } = "nav-link disabled";
 }

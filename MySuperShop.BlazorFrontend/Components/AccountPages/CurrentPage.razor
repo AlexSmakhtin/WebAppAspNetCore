@@ -1,0 +1,46 @@
+@page "/currentAccount"
+@implements IDisposable
+@inject IWebAppHttpClient HttpClient
+
+<div class="card">
+    <div class="card-header">
+        Current account
+    </div>
+    <div class="card-body">
+        <form>
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" class="form-control" id="name" readonly @bind="_currentAccount.Name">
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email" readonly @bind="_currentAccount.EmailAddress">
+            </div>
+            <span class="text-info">@_infoMessage</span>
+        </form>
+    </div>
+</div>
+
+@code {
+    private Account _currentAccount = null!;
+    private readonly CancellationTokenSource _cts = new();
+    private string _infoMessage = string.Empty;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _currentAccount = await HttpClient.GetCurrentAccount(_cts.Token);
+        }
+        catch (Exception e)
+        {
+            _infoMessage = "Jwt error";
+        }
+    }
+
+    public void Dispose()
+    {
+        _cts.Dispose();
+    }
+
+}
