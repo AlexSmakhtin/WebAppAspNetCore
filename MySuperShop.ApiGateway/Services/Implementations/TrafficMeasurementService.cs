@@ -1,9 +1,7 @@
 using ApiGateway.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using MySuperShop.ApiGateway.DbContexts;
 using MySuperShop.Domain.Entities;
 using MySuperShop.Domain.Repositories.Interfaces;
-using MySuperShop.Domain.Services;
 
 namespace ApiGateway.Services.Implementations;
 

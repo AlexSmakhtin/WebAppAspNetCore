@@ -1,8 +1,5 @@
 using ApiGateway.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using MySuperShop.ApiGateway.DbContexts;
-using MySuperShop.Domain.Repositories.Interfaces;
-using MySuperShop.Domain.Services;
 
 namespace MySuperShop.ApiGateway.Middleware;
 

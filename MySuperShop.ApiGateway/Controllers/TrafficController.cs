@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MySuperShop.Domain.Entities;
 using MySuperShop.Domain.Repositories.Interfaces;
-using MySuperShop.Domain.Services;
 
 namespace MySuperShop.ApiGateway.Controllers;
 [Authorize]
