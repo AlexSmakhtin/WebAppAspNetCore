@@ -1,8 +1,11 @@
 @page "/authentication"
 @inject IWebAppHttpClient HttpClient
 @inject IValidator Validator
+@using MySuperShop.BlazorFrontend.Services.Implementations
+@using Blazored.LocalStorage
 @implements IDisposable
-@inject IJSRuntime JSRuntime
+@inject LayoutStateService StateService
+@inject ILocalStorageService LocalStorage
 
 <PageTitle>Authentication</PageTitle>
 
@@ -26,9 +29,8 @@
     private string _infoMessage = string.Empty;
     private readonly CancellationTokenSource _cts = new();
 
-    [CascadingParameter]
-    protected string NavLinkClass { get; set; }
-    
+    [Parameter] public EventCallback<bool> IsAuthorizedChanged { get; set; }
+
     private async Task Authenticate()
     {
         try
@@ -41,9 +43,10 @@
             Validator.Validate<AuthenticationRequest>(authRequest);
             var response = await HttpClient.Authenticate(authRequest, _cts.Token);
             var jwt = response.Jwt;
-            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "jwt", jwt);
+            await LocalStorage.SetItemAsync("jwt", jwt);
             _infoMessage = $"Success auth.";
-            NavLinkClass = "nav-link";
+            StateService.SetCssClass("nav-link");
+            StateHasChanged();
         }
         catch (Exception ex)
         {

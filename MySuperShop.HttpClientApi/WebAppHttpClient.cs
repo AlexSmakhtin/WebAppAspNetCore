@@ -114,6 +114,12 @@ namespace MySuperShop.HttpClientApi
             return account;
         }
 
+        public Task SetHeader(string name, IEnumerable<string> values)
+        {
+            _httpClient.DefaultRequestHeaders.Add(name, values);
+            return Task.CompletedTask;
+        }
+
         public void Dispose()
         {
             _httpClient.Dispose();

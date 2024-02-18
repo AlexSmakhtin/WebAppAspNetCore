@@ -1,6 +1,12 @@
-﻿@inherits LayoutComponentBase
+﻿@using MySuperShop.BlazorFrontend.Services.Implementations
+@using Blazored.LocalStorage
+@inherits LayoutComponentBase
 @namespace MySuperShop.BlazorFrontend.Layout
+@inject LayoutStateService StateService
+@implements IDisposable
+@inject ILocalStorageService LocalStorage
 @inject IJSRuntime JsRuntime
+@inject IWebAppHttpClient HttpClient
 
 <div class="container-fluid">
     <div class="row">
@@ -27,37 +33,37 @@
                         </NavLink>
                     </li>
                     <li class="nav-item">
-                        <NavLink class="@{NavLinkClass}" href="products">
+                        <NavLink class="@StateService.CssClass" href="products">
                             <span data-feather="file"></span>
                             Products
                         </NavLink>
                     </li>
                     <li class="nav-item">
-                        <NavLink class="@{NavLinkClass}" href="add_product">
+                        <NavLink class="@StateService.CssClass" href="add_product">
                             <span data-feather="file"></span>
                             Add product
                         </NavLink>
                     </li>
                     <li class="nav-item">
-                        <NavLink class="@{NavLinkClass}" href="delete_product">
+                        <NavLink class="@StateService.CssClass" href="delete_product">
                             <span data-feather="file"></span>
                             Delete product
                         </NavLink>
                     </li>
                     <li class="nav-item">
-                        <NavLink class="@{NavLinkClass}" href="update_product">
+                        <NavLink class="@StateService.CssClass" href="update_product">
                             <span data-feather="file"></span>
                             Update product
                         </NavLink>
                     </li>
                     <li class="nav-item">
-                        <NavLink class="@{NavLinkClass}" href="traffic">
+                        <NavLink class="@StateService.CssClass" href="traffic">
                             <span data-feather="file"></span>
                             Traffic info
                         </NavLink>
                     </li>
                     <li class="nav-item">
-                        <NavLink class="@{NavLinkClass}" href="currentAccount">
+                        <NavLink class="@StateService.CssClass" href="currentAccount">
                             <span data-feather="file"></span>
                             Current account
                         </NavLink>
@@ -75,7 +81,30 @@
     </div>
 </div>
 
-@code
-{
-    private string NavLinkClass { get; set; } = "nav-link disabled";
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        StateService.OnChange += Refresh;
+        var jwt = await LocalStorage.GetItemAsStringAsync("jwt");
+        if (jwt != null)
+        {
+            StateService.SetCssClass("nav-link");
+            var values = new List<string> { $"Bearer {jwt}" };
+            await HttpClient.SetHeader("Authorization", values);
+        }
+        await JsRuntime.InvokeAsync<string>("console.log", $"jwt: {jwt}");
+    }
+
+    private void Refresh()
+    {
+        StateHasChanged();
+    }
+
+    // Очистка подписки при удалении компонента
+    public void Dispose()
+    {
+        StateService.OnChange -= Refresh;
+    }
+
 }

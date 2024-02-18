@@ -1,3 +1,4 @@
+using Blazored.LocalStorage;
 using MySuperShop.BlazorFrontend.Services.Implementations;
 using MySuperShop.BlazorFrontend.Services.Interfaces;
 using MySuperShop.HttpClientApi;
@@ -15,7 +16,8 @@ namespace MySuperShop.BlazorFrontend
             builder.RootComponents.Add<HeadOutlet>("head::after");
             builder.Services.AddScoped<IWebAppHttpClient, WebAppHttpClient>();
             builder.Services.AddSingleton<IValidator, RequestValidator>();
-            
+            builder.Services.AddSingleton<LayoutStateService>();
+            builder.Services.AddBlazoredLocalStorage();
             await builder.Build().RunAsync();
         }
     }
