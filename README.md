@@ -1,1 +1,1 @@
-Educational project on asp.net core
+Educational project asp.net core(server), blazor(client) 
